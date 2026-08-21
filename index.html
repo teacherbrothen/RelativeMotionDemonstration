@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relative Motion Simulator</title>
     <style>
-       
-/* Cross-browser vector rendering framework */
-.vector-container {
-    position: relative;
-    display: inline-block;
-    padding-top: 0.5em; /* Leaves clear room for the top arrow */
-}
-.vector-arrow {
-    position: absolute;
-    top: -0.2em;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.8em;
-    line-height: 1;
-}
+        /* Cross-browser vector rendering framework */
+        .vector-container {
+            position: relative;
+            display: inline-block;
+            padding-top: 0.5em;
+        }
+        .vector-arrow {
+            position: absolute;
+            top: -0.2em;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            line-height: 1;
+        }
 
-	 body {
+        body {
             margin: 0;
             padding: 20px;
             font-family: Arial, sans-serif;
@@ -164,24 +165,54 @@
             border-color: #0070f3;
         }
     </style>
-</head><body><div class="simulator-wrapper">
-<h2>Relative Motion Demonstration</h2>
-<div class="simulation-container"><img id="motorcycle" class="motorcycle" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic0_20260821122852942.png" alt="Motorcycle Rider">
-<div class="train-wrapper" id="trainWrapper"><img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"></div>
-<div class="tracks"></div>
-</div>
-<div class="controls-panel">
-<div class="control-block">
-<div class="control-label">Velocity of Train relative to Ground: <span class="vector-var" style="color: #0070f3;"> <sub>train</sub><span class="vector-container"><span class="vector-arrow">→</span>v</span><sub>ground</sub> </span> (m/s)</div>
-<div class="control-row"><input type="range" id="trainSlider" min="-100" max="100" value="30"> <input type="number" id="trainNumber" min="-100" max="100" value="30"></div>
-</div>
-<div class="control-block">
-<div class="control-label">Velocity of Motorcycle relative to Train: <span class="vector-var" style="color: #10b981;"> <sub>bike</sub><span class="vector-container"><span class="vector-arrow">→</span>v</span><sub>train</sub> </span> (m/s)</div>
-<div class="control-row"><input type="range" id="bikeSlider" min="-100" max="100" value="33"> <input type="number" id="bikeNumber" min="-100" max="100" value="33"></div>
-</div>
-</div>
-</div>
-<p><script>
+</head>
+<body>
+
+    <div class="simulator-wrapper">
+        <h2>Relative Motion Demonstration</h2>
+        
+        <div class="simulation-container">
+            <img id="motorcycle" class="motorcycle" src="motorcycle.png" alt="Motorcycle">
+
+            <div class="train-wrapper" id="trainWrapper">
+                <img class="train-car" src="train.png" alt="Train Car">
+                <img class="train-car" src="train.png" alt="Train Car">
+                <img class="train-car" src="train.png" alt="Train Car">
+                <img class="train-car" src="train.png" alt="Train Car">
+            </div>
+            <div class="tracks"></div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="control-block">
+                <div class="control-label">
+                  Velocity of Train relative to Ground: 
+                  <span class="vector-var" style="color:#0070f3">
+                    <sub>train</sub><span class="vector-container"><span class="vector-arrow">&rarr;</span>v</span><sub>ground</sub>
+                  </span> (m/s)
+                </div>
+                <div class="control-row">
+                    <input type="range" id="trainSlider" min="-100" max="100" value="30">
+                    <input type="number" id="trainNumber" min="-100" max="100" value="30">
+                </div>
+            </div>
+
+            <div class="control-block">
+                <div class="control-label">
+                  Velocity of Motorcycle relative to Train: 
+                  <span class="vector-var" style="color:#10b981">
+                    <sub>bike</sub><span class="vector-container"><span class="vector-arrow">&rarr;</span>v</span><sub>train</sub>
+                  </span> (m/s)
+                </div>
+                <div class="control-row">
+                    <input type="range" id="bikeSlider" min="-100" max="100" value="33">
+                    <input type="number" id="bikeNumber" min="-100" max="100" value="33">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
         const trainWrapper = document.getElementById('trainWrapper');
         const motorcycle = document.getElementById('motorcycle');
         
@@ -267,4 +298,7 @@
         updateSliderFill(trainSlider);
         updateSliderFill(bikeSlider);
         requestAnimationFrame(updateSimulation);
-    </script></p></body></html>
+    </script>
+
+</body>
+</html>
