@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Relative Motion Simulator</title>
+    <style>
+       
+/* Cross-browser vector rendering framework */
+.vector-container {
+    position: relative;
+    display: inline-block;
+    padding-top: 0.5em; /* Leaves clear room for the top arrow */
+}
+.vector-arrow {
+    position: absolute;
+    top: -0.2em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8em;
+    line-height: 1;
+}
+
+	 body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        .simulator-wrapper {
+            width: 700px;
+            margin: 0 auto;
+        }
+
+        .simulation-container {
+            position: relative;
+            width: 100%;
+            height: 180px; 
+            background-color: #e0f2fe; 
+            border: 2px solid #334155;
+            border-radius: 8px;
+            overflow: hidden; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tracks {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            height: 4px;
+            background-color: #64748b;
+            z-index: 1;
+        }
+
+        .train-wrapper {
+            display: flex;
+            position: absolute;
+            bottom: 24px; 
+            left: 0;
+            will-change: transform;
+            z-index: 2;
+        }
+
+        .train-car {
+            height: 45px; 
+            display: inline-block;
+            flex-shrink: 0;
+            margin-right: -15px; 
+        }
+
+        .motorcycle {
+            position: absolute;
+            bottom: 67px; 
+            height: 30px; 
+            will-change: transform;
+            z-index: 3; 
+        }
+
+        /* --- CONTROLLER STYLING --- */
+        .controls-panel {
+            margin-top: 15px;
+            padding: 16px;
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .control-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-label {
+            font-size: 16px;
+            color: #334155;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        /* Custom typography for the exact physics vector formatting */
+        .vector-var {
+            font-family: "Times New Roman", Times, serif;
+            font-style: italic;
+            font-size: 19px;
+            font-weight: bold;
+        }
+        
+        .vector-var sub {
+            font-family: Arial, sans-serif;
+            font-style: normal;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        
+        .vector-var .v-connector {
+            font-family: "Times New Roman", Times, serif;
+            font-style: italic;
+            font-size: 16px;
+            font-weight: normal;
+            margin: 0 1px;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            flex-grow: 1;
+            height: 8px;
+            border-radius: 9999px;
+            background: #e2e8f0; 
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+
+        input[type="number"] {
+            width: 75px;
+            padding: 6px 8px;
+            font-size: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            text-align: center;
+            background-color: #ffffff;
+            outline: none;
+        }
+        input[type="number"]:focus {
+            border-color: #0070f3;
+        }
+    </style>
+</head><body><div class="simulator-wrapper">
+<h2>Relative Motion Demonstration</h2>
+<div class="simulation-container"><img id="motorcycle" class="motorcycle" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic0_20260821122852942.png" alt="Motorcycle Rider">
+<div class="train-wrapper" id="trainWrapper"><img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"> <img class="train-car" src="/content/enforced/1783509400-64_2204_B62_202601_BROTHEN/pic1_20260821122852943.png" alt="Train Car"></div>
+<div class="tracks"></div>
+</div>
+<div class="controls-panel">
+<div class="control-block">
+<div class="control-label">Velocity of Train relative to Ground: <span class="vector-var" style="color: #0070f3;"> <sub>train</sub><span class="vector-container"><span class="vector-arrow">→</span>v</span><sub>ground</sub> </span> (m/s)</div>
+<div class="control-row"><input type="range" id="trainSlider" min="-100" max="100" value="30"> <input type="number" id="trainNumber" min="-100" max="100" value="30"></div>
+</div>
+<div class="control-block">
+<div class="control-label">Velocity of Motorcycle relative to Train: <span class="vector-var" style="color: #10b981;"> <sub>bike</sub><span class="vector-container"><span class="vector-arrow">→</span>v</span><sub>train</sub> </span> (m/s)</div>
+<div class="control-row"><input type="range" id="bikeSlider" min="-100" max="100" value="33"> <input type="number" id="bikeNumber" min="-100" max="100" value="33"></div>
+</div>
+</div>
+</div>
+<p><script>
+        const trainWrapper = document.getElementById('trainWrapper');
+        const motorcycle = document.getElementById('motorcycle');
+        
+        const trainSlider = document.getElementById('trainSlider');
+        const trainNumber = document.getElementById('trainNumber');
+        const bikeSlider = document.getElementById('bikeSlider');
+        const bikeNumber = document.getElementById('bikeNumber');
+
+        const CAR_WIDTH = 231; 
+        const CONTAINER_WIDTH = 700;
+        const MAX_SPEED_STEP = 3.88; 
+
+        let trainX = -CAR_WIDTH; 
+        let bikeX = 200; 
+        
+        let trainVelocity = 30;
+        let bikeVelocity = 33;
+
+        function updateSliderFill(slider) {
+            const min = parseInt(slider.min);
+            const max = parseInt(slider.max);
+            const val = parseInt(slider.value);
+            const percentage = ((val - min) / (max - min)) * 100;
+            const fillColor = slider.id === 'trainSlider' ? '#0070f3' : '#10b981';
+            slider.style.background = `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${percentage}%, #e2e8f0 ${percentage}%, #e2e8f0 100%)`;
+        }
+
+        trainSlider.addEventListener('input', (e) => {
+            trainVelocity = parseInt(e.target.value, 10);
+            trainNumber.value = trainVelocity;
+            updateSliderFill(trainSlider);
+        });
+        trainNumber.addEventListener('input', (e) => {
+            let val = parseInt(e.target.value, 10);
+            if (isNaN(val)) return;
+            if (val > 100) val = 100; if (val < -100) val = -100;
+            trainVelocity = val; trainSlider.value = val;
+            updateSliderFill(trainSlider);
+        });
+
+        bikeSlider.addEventListener('input', (e) => {
+            bikeVelocity = parseInt(e.target.value, 10);
+            bikeNumber.value = bikeVelocity;
+            updateSliderFill(bikeSlider);
+        });
+        bikeNumber.addEventListener('input', (e) => {
+            let val = parseInt(e.target.value, 10);
+            if (isNaN(val)) return;
+            if (val > 100) val = 100; if (val < -100) val = -100;
+            bikeVelocity = val; bikeSlider.value = val;
+            updateSliderFill(bikeSlider);
+        });
+
+        function updateSimulation() {
+            const trainStep = MAX_SPEED_STEP * (trainVelocity / 100);
+            trainX += trainStep;
+
+            if (trainX >= 0) {
+                trainX -= CAR_WIDTH;
+            } else if (trainX <= -CAR_WIDTH * 2) {
+                trainX += CAR_WIDTH;
+            }
+            trainWrapper.style.transform = `translateX(${trainX}px)`;
+
+            const bikeRelativeStep = MAX_SPEED_STEP * (bikeVelocity / 100);
+            const totalBikeGroundStep = bikeRelativeStep + trainStep; 
+
+            bikeX += totalBikeGroundStep;
+
+            const bikeWidthOffset = 50; 
+            if (bikeX > CONTAINER_WIDTH + bikeWidthOffset) {
+                bikeX = -bikeWidthOffset;
+            } else if (bikeX < -bikeWidthOffset) {
+                bikeX = CONTAINER_WIDTH + bikeWidthOffset;
+            }
+
+            const directionFlip = bikeVelocity < 0 ? 'scaleX(-1)' : 'scaleX(1)';
+            motorcycle.style.transform = `translateX(${bikeX}px) ${directionFlip}`;
+
+            requestAnimationFrame(updateSimulation);
+        }
+
+        updateSliderFill(trainSlider);
+        updateSliderFill(bikeSlider);
+        requestAnimationFrame(updateSimulation);
+    </script></p></body></html>
