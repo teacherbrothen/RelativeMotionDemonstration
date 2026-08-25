@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relative Motion Simulator</title>
     <style>
-        /* Cross-browser vector rendering framework */
         .vector-container {
             position: relative;
             display: inline-block;
@@ -76,7 +75,6 @@
             z-index: 3; 
         }
 
-        /* --- CONTROLLER STYLING --- */
         .controls-panel {
             margin-top: 15px;
             padding: 16px;
@@ -100,7 +98,6 @@
             font-weight: 500;
         }
 
-        /* Custom typography for the exact physics vector formatting */
         .vector-var {
             font-family: "Times New Roman", Times, serif;
             font-style: italic;
@@ -113,14 +110,6 @@
             font-style: normal;
             font-size: 12px;
             font-weight: normal;
-        }
-        
-        .vector-var .v-connector {
-            font-family: "Times New Roman", Times, serif;
-            font-style: italic;
-            font-size: 16px;
-            font-weight: normal;
-            margin: 0 1px;
         }
 
         .control-row {
@@ -174,7 +163,10 @@
         <div class="simulation-container">
             <img id="motorcycle" class="motorcycle" src="motorcycle1.png" alt="Motorcycle">
 
+            <!-- Increased car count to 6 to safely cover 700px viewport plus offsets -->
             <div class="train-wrapper" id="trainWrapper">
+                <img class="train-car" src="train1.png" alt="Train Car">
+                <img class="train-car" src="train1.png" alt="Train Car">
                 <img class="train-car" src="train1.png" alt="Train Car">
                 <img class="train-car" src="train1.png" alt="Train Car">
                 <img class="train-car" src="train1.png" alt="Train Car">
@@ -221,11 +213,13 @@
         const bikeSlider = document.getElementById('bikeSlider');
         const bikeNumber = document.getElementById('bikeNumber');
 
-        const CAR_WIDTH = 231; 
+        // Effective car width including negative margin-right (-15px offset)
+        const CAR_WIDTH = 216; 
         const CONTAINER_WIDTH = 700;
         const MAX_SPEED_STEP = 3.88; 
 
-        let trainX = -CAR_WIDTH; 
+        // Start positioned off-screen to the left so it seamlessly scrolls in either direction
+        let trainX = -CAR_WIDTH * 2; 
         let bikeX = 200; 
         
         let trainVelocity = 30;
@@ -270,9 +264,10 @@
             const trainStep = MAX_SPEED_STEP * (trainVelocity / 100);
             trainX += trainStep;
 
-            if (trainX >= 0) {
+            // Loop smoothly by single car increments within a safe boundary
+            if (trainX >= -CAR_WIDTH) {
                 trainX -= CAR_WIDTH;
-            } else if (trainX <= -CAR_WIDTH * 2) {
+            } else if (trainX <= -CAR_WIDTH * 3) {
                 trainX += CAR_WIDTH;
             }
             trainWrapper.style.transform = `translateX(${trainX}px)`;
